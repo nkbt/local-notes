@@ -27,7 +27,6 @@ require.config({
 			exports: 'geo_position_js'
 		},
 		history: {
-//			exports: 'History',
 			init: function() {
 				History.options.html4Mode = true;
 				History.options.debug = true;
@@ -38,7 +37,7 @@ require.config({
 	},
 	config: {
 		'lib/app': {
-			baseUrl: '../../'
+			baseUrl: '../'
 		}
 	},
 	deps: [

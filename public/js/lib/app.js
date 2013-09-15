@@ -10,7 +10,7 @@ define('lib/app', ['module', 'dom', 'underscore'], function (module, $, _) {
 
 
 	function text(path, callback) {
-		var templateModule = ['vendor/require/text!', path].join('');
+		var templateModule = ['vendor/require/text!', config.baseUrl, path].join('');
 		return path && require(
 			[templateModule],
 			callback,
@@ -22,12 +22,12 @@ define('lib/app', ['module', 'dom', 'underscore'], function (module, $, _) {
 
 
 	function template(name, callback) {
-		return text([config.baseUrl, config.templates, '/', name, '.html'].join(''), callback);
+		return text([config.templates, '/', name, '.html'].join(''), callback);
 	}
 
 
 	function view(controller, action, callback) {
-		return text([config.baseUrl, config.views, '/', controller, '/', action, '.html'].join(''), callback);
+		return text([config.views, '/', controller, '/', action, '.html'].join(''), callback);
 	}
 
 
