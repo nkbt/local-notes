@@ -1,0 +1,28 @@
+#############
+## Node
+#############
+
+node_modules
+docs
+
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+*.rdb
+
+pids
+logs
+results
+
+npm-debug.log
+
+#############
+## PHP Storm
+#############
+.idea
+atlassian-ide-plugin.xml
