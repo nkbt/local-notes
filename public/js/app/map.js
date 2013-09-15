@@ -34,7 +34,7 @@ define('app/map', ['dom', 'underscore', 'lib/app', 'lib/map'], function ($, _, a
 		return function (event) {
 			var latLng = event.latLng;
 			
-			app.$root.trigger('lib/dispatcher:dispatch', ['note/add']);
+			app.$root.trigger('lib/dispatcher:dispatch', ['/note/add']);
 			
 			markerAdd(googleMap, latLng, 'test');
 		}
