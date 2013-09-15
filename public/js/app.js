@@ -1,6 +1,7 @@
 'use strict';
 
 require.config({
+	urlArgs: window.noCacheSuffix,
 	baseUrl: 'js',
 	paths: {
 		underscore: 'vendor/underscore',
@@ -27,7 +28,7 @@ require.config({
 			exports: 'geo_position_js'
 		},
 		history: {
-			init: function() {
+			init: function () {
 				History.options.html4Mode = true;
 				History.options.debug = true;
 				return History;
