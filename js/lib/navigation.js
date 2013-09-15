@@ -11,11 +11,11 @@ define('lib/navigation', ['module', 'dom', 'underscore', 'lib/app', 'app/firebas
 
 
 	function checkUser($element) {
-		return auth(function(error, user) {
+		return auth(function (error, user) {
 			return handleUserMenu(user);
 		});
 	}
-	
+
 	function changeUrl(path) {
 		return function () {
 			app.$root.find(['.lib_navigation-item', config.active].join('.')).removeClass(config.active);
@@ -34,21 +34,24 @@ define('lib/navigation', ['module', 'dom', 'underscore', 'lib/app', 'app/firebas
 			return delegate.call();
 		});
 		delegates = [];
-		
+
 		return checkUser($element);
 	}
-	
-	
+
+
 	function handleUserMenu(user) {
 		app.$root.find('[data-lib_navigation-guest]').toggle(!user);
 		app.$root.find('[data-lib_navigation-user]').toggle(!!user);
 		return user && user.displayName && app.$root.find('[data-lib_navigation-user-name]').html(user.displayName);
 	}
+
+
 	function onLogin(event, user) {
 		return handleUserMenu(user);
 	}
+
+
 	function onLogout() {
-		console.log('onLogout', onLogout);
 		return handleUserMenu();
 	}
 

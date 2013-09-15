@@ -16,11 +16,12 @@ define(
 				app.$root.trigger('app/controllers/login:success', user);
 			}
 		});
-		console.log('authObject', authObject);
+
 
 		function loginWith(provider) {
 			authObject.login(provider)
 		}
+
 
 		var actions = {};
 
