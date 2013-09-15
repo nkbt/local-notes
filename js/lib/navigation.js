@@ -1,6 +1,6 @@
 "use strict";
 
-define('lib/navigation', ['module', 'dom', 'underscore', 'lib/app'], function (module, $, _, app) {
+define('lib/navigation', ['module', 'dom', 'underscore', 'lib/app', 'app/firebase/markers/auth'], function (module, $, _, app, auth) {
 
 	var config = _.defaults(module.config(), {
 		active: 'active'
@@ -10,6 +10,14 @@ define('lib/navigation', ['module', 'dom', 'underscore', 'lib/app'], function (m
 	var templateLoaded = false, delegates = [];
 
 
+	function checkUser($element) {
+		auth(function(error, user) {
+			$element.find('[data-lib_navigation-guest]').toggle(!user);
+			$element.find('[data-lib_navigation-user]').toggle(!!user);
+			return user && user.displayName && $element.find('[data-lib_navigation-user-name]').html(user.displayName);
+		});
+	}
+	
 	function changeUrl(path) {
 		return function () {
 			app.$root.find(['.lib_navigation-item', config.active].join('.')).removeClass(config.active);
@@ -21,12 +29,15 @@ define('lib/navigation', ['module', 'dom', 'underscore', 'lib/app'], function (m
 		return templateLoaded && changeUrl(path)() || delegates.push(changeUrl(path));
 	}
 
-	function init() {
+	function init(event) {
+		var $element = $(event.target).closest('.lib_navigation');
 		templateLoaded = true;
 		_.each(delegates, function (delegate) {
 			return delegate.call();
 		});
 		delegates = [];
+		
+		return checkUser($element);
 	}
 
 	app.$root.on('lib/dispatcher:urlChanged', null, onUrlChanged);

@@ -3,11 +3,10 @@
 /*jshint browser:true */
 /*jslint browser:true */
 
-define('app/map', ['dom', 'underscore', 'lib/app', 'lib/map', 'firebase'], function ($, _, app, map, Firebase) {
+define('app/map', ['dom', 'underscore', 'lib/app', 'lib/map', 'app/firebase/markers'], function ($, _, app, map, markers) {
 
 
-	var markers = new Firebase('//local-notes.firebaseio.com/markers'),
-		temporaryMarker = null,
+	var temporaryMarker = null,
 		googleMarkers = {};
 
 

@@ -3,14 +3,13 @@
 define(
 	'app/controllers/note',
 	[
-		'dom', 'underscore', 'lib/app', 'lib/dom/form', 'lib/messenger', 'firebase',
+		'dom', 'underscore', 'lib/app', 'lib/dom/form', 'lib/messenger', 'app/firebase/markers',
 		'lib/messenger'
 	],
-	function ($, _, app, form, messenger, Firebase) {
+	function ($, _, app, form, messenger, markers) {
 
 
-		var actions = {},
-			markers = new Firebase('//local-notes.firebaseio.com/markers');
+		var actions = {};
 
 		actions.add = function (template) {
 			app.$root.trigger('lib/layout:renderBlock', ['content', template]);

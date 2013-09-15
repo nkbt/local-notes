@@ -10,6 +10,24 @@
 		</div>
 		<div class="collapse navbar-collapse">
 			<ul class="nav navbar-nav">
+
+				<li class="dropdown" data-lib_navigation-guest>
+					<a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)">
+						Login <span class="caret"></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li class="lib_navigation-item" data-lib_navigation-match="/user/login">
+							<a href="/login/twitter" class="lib_dispatcher-link"><i class="icon-twitter"></i> Twitter</a>
+						</li>
+						<li class="lib_navigation-item" data-lib_navigation-match="/user/login">
+							<a href="/login/facebook" class="lib_dispatcher-link"><i class="icon-facebook"></i> Facebook</a>
+						</li>
+					</ul>
+				</li>
+				<li class="lib_navigation-item" data-lib_navigation-user data-lib_navigation-match="/user/logout" style="display: none;">
+					<a href="/user/logout" class="lib_dispatcher-link">Logout, <em data-lib_navigation-user-name></em></a>
+				</li>
+
 				<!--<li class="lib_navigation-item" data-lib_navigation-match="/"><a href="/" class="lib_dispatcher-link">Home</a></li>-->
 			</ul>
 		</div>

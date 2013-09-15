@@ -10,7 +10,8 @@ require.config({
 		bootstrap: ['vendor/bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js'],
 		history: 'vendor/history/html4',
 		geo: 'vendor/geo',
-		firebase: '//cdn.firebase.com/v0/firebase'
+		Firebase: '//cdn.firebase.com/v0/firebase',
+		FirebaseSimpleLogin: '//cdn.firebase.com/v0/firebase-simple-login'
 	},
 	shim: {
 		async: {
@@ -28,8 +29,12 @@ require.config({
 		geo: {
 			exports: 'geo_position_js'
 		},
-		firebase: {
+		Firebase: {
 			exports: 'Firebase'
+		},
+		FirebaseSimpleLogin: {
+			deps: ['Firebase'],
+			exports: 'FirebaseSimpleLogin'
 		},
 		history: {
 			init: function () {
