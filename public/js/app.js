@@ -68,5 +68,6 @@ require([
 
 	$(function () {
 		app.$root.trigger('lib/layout:render');
+		app.$root.trigger('lib/dispatcher:dispatch', ['/']); // Always start from home
 	});
 });

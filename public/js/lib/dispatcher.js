@@ -109,7 +109,7 @@ define(
 			return dispatch(state.hash, state.title);
 		}
 
-		$(restoreState);
+		// $(restoreState); // Do not restore state
 
 		return {
 			dispatch: dispatch
