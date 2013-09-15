@@ -3,7 +3,7 @@
 define(
 	'lib/dispatcher',
 	[
-		'module', 'dom', 'underscore', 'history', 'lib/app', 'lib/router',
+		'module', 'dom', 'underscore', /*'history',*/ 'lib/app', 'lib/router',
 		'lib/layout',
 		'lib/navigation'
 	],
@@ -11,12 +11,11 @@ define(
 	 * @param {Module} module
 	 * @param {jQuery} $
 	 * @param {underscore} _
-	 * @param {History} history
 	 * @param {lib/app} app
 	 * @param {lib/router} router
 	 * @returns {{dispatch: Function}}
 	 */
-		function (module, $, _, history, app, router) {
+		function (module, $, _, app, router) {
 
 		var config = _.defaults(module.config(), {
 				basePath: 'app/controllers'
@@ -56,7 +55,7 @@ define(
 		 */
 		function updateUrl(route, title) {
 			var path = ['/', route.replace(routeCleaner, '')].join('');
-//			history.pushState(null, title, path);
+			document.location.hash = ['!', path].join('');
 			console.log('lib/dispatcher', 'trigger', 'lib/dispatcher:urlChanged', path, title);
 			return app.$root.trigger('lib/dispatcher:urlChanged', [path, title]);
 		}
@@ -101,15 +100,16 @@ define(
 		/**
 		 * Restoring current page
 		 */
-//		function restoreState() {
-//			var state = history.getState();
-//			console.log('lib/dispatcher', 'restoreState', state, state.hash, state.title);
-//			return dispatch(state.hash, state.title);
-//		}
-//
-//		history.Adapter.bind(window, 'statechange', restoreState);
-//
-//		$(restoreState);
+		function restoreState() {
+			var state = {
+				hash: document.location.hash.replace(/^\#\!/, ''),
+				title: ''
+			};
+			console.log('lib/dispatcher', 'restoreState', state, state.hash, state.title);
+			return dispatch(state.hash, state.title);
+		}
+
+		$(restoreState);
 
 		return {
 			dispatch: dispatch
