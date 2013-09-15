@@ -7,13 +7,18 @@
 define(
 	'lib/map',
 	[
-		'dom', 'lib/cookie', 'geo', 'lib/app',
+		'module', 'dom', 'underscore', 'lib/cookie', 'geo', 'lib/app',
 		'vendor/require/async!http://maps.googleapis.com/maps/api/js?sensor=true!callback'
 	],
-	function ($, cookie, geo, app) {
+	function (module, $, _, cookie, geo, app) {
 
 
-		var globalGoogleMap = null,
+		var config = _.defaults(module.config(), {
+				lat: 0,
+				lng: 0,
+				zoom: 10
+			}),
+			globalGoogleMap = null,
 			loading = false,
 			delegates = [];
 

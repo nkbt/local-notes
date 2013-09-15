@@ -1,41 +1,29 @@
 <div class="app_controllers_note-add">
 
 	<div class="page-header">
-		<h1>Add note <small>Drag marker or click on map to adjust position</small></h1>
+		<h1>Add note
+			<small>Drag marker or click on map to adjust position</small>
+		</h1>
 	</div>
 
-	<div class="form-add-container" style="position: relative;">
-		<form class="app_controllers_note-add-form form-inline" role="form" action="/note/add" method="POST" style="position: absolute;z-index: 9999;width: 100%;padding: 1em;background: rgba(255,255,255,0.8);">
-	
-			<div class="row">
-				<div class="col-lg-6">
+	<div class="row">
+		<div class="col-lg-4" style="position: relative;">
+			<div style="position: absolute; z-index: 1; width: 100%; background: rgba(255,255,255,0.8);">
+				<form class="app_controllers_note-add-form" role="form" action="/note/add" method="POST"
+						style="padding: 1em 1em 0 1em;">
+					<input type="hidden" class="app_controllers_note-lng" id="lng" name="lng" placeholder="Longitude" required>
+					<input type="hidden" class="app_controllers_note-lat" id="lat" name="lat" placeholder="Latitude" required>
+
 					<div class="form-group">
 						<label for="note" class="sr-only">Write your note</label>
-						<input type="text" class="form-control input-lg" id="note" name="note" value="" placeholder="Write your note" required autofocus>
+						<input type="text" class="form-control input-sm" id="note" name="note" value="" placeholder="Write your note" required autofocus>
 					</div>
 					<div class="form-group">
-						<button type="submit" class="btn btn-primary btn-lg">Save</button>
+						<button type="submit" class="btn btn-primary btn-sm">Save</button>
+						<button type="reset" class="btn btn-default btn-sm">Cancel</button>
 					</div>
-					<div class="form-group">
-						<button type="reset" class="btn btn-default btn-lg">Cancel</button>
-					</div>
-				</div>
-	
-				<div class="col-lg-6">
-					<div class="form-group">
-						<label for="lng" class="sr-only">Longitude</label>
-						<input type="text" class="form-control input-lg app_controllers_note-lng" id="lng" name="lng" placeholder="Longitude" required readonly>
-					</div>
-					<div class="form-group">
-						<label for="lat" class="sr-only">Latitude</label>
-						<input type="text" class="form-control input-lg app_controllers_note-lat" id="lat" name="lat" placeholder="Latitude" required readonly>
-					</div>
-				</div>
+				</form>
 			</div>
-		</form>
-
+		</div>
 	</div>
-
-
-	<p></p>
 </div>

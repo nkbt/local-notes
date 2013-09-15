@@ -3,13 +3,14 @@
 define(
 	'app/controllers/note',
 	[
-		'dom', 'underscore', 'lib/app', 'lib/dom/form', 'lib/messenger',
+		'dom', 'underscore', 'lib/app', 'lib/dom/form', 'lib/messenger', 'firebase',
 		'lib/messenger'
 	],
-	function ($, _, app, form, messenger) {
+	function ($, _, app, form, messenger, Firebase) {
 
 
-		var actions = {};
+		var actions = {},
+			markers = new Firebase('//local-notes.firebaseio.com/markers');
 
 		actions.add = function (template) {
 			app.$root.trigger('lib/layout:renderBlock', ['content', template]);
@@ -28,30 +29,24 @@ define(
 			}
 		});
 
-		function onAddViewReady(event) {
-			var $element = $(event.target).closest('.app_controllers_note-add');
-			console.log('app/controllers/note', 'onAddReady', $element);
-		}
-
 		function onAddFormSubmit(event) {
 			event.preventDefault();
-			var $form = $(event.target).closest('.app_controllers_note-add-form');
-
-			try {
-			} catch (error) {
-				return $form.trigger('lib/messenger:show', [messenger.TYPE_ERROR, error.message]);
-			}
+			var $form = $(event.target).closest('.app_controllers_note-add-form'),
+				values = form.values($form);
 
 			if ($form.find(':invalid').length > 0) {
 				return $form.trigger('lib/messenger:show', [messenger.TYPE_ERROR, 'Please, fill the form']);
 			}
 
 			form.disable($form);
-
-			return setTimeout(function () {
+			return markers.push(values, function (error) {
 				form.enable($form);
-				return $form.trigger('lib/messenger:show', [messenger.TYPE_MESSAGE, 'OK']);
-			}, 2000);
+				if (error) {
+					return $form.trigger('lib/messenger:show', [messenger.TYPE_ERROR, 'Cannot save.']);
+				}
+				$form.trigger('app/map:markerReset');
+				return $form.trigger('lib/messenger:show', [messenger.TYPE_MESSAGE, 'Saved.']);
+			});
 		}
 
 		function onAddFormReset(event) {
@@ -69,7 +64,6 @@ define(
 		app.$root
 			.on('submit', '.app_controllers_note-add .app_controllers_note-add-form', onAddFormSubmit)
 			.on('reset', '.app_controllers_note-add .app_controllers_note-add-form', onAddFormReset)
-			.on('lib/layout:renderBlock:done', '.app_controllers_note-add', onAddViewReady)
 			.on('app/map:markerMove:done', null, onMarkerMoved);
 
 

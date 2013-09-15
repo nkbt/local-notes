@@ -9,7 +9,8 @@ require.config({
 		string: 'vendor/string',
 		bootstrap: ['vendor/bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js'],
 		history: 'vendor/history/html4',
-		geo: 'vendor/geo'
+		geo: 'vendor/geo',
+		firebase: '//cdn.firebase.com/v0/firebase'
 	},
 	shim: {
 		async: {
@@ -27,6 +28,9 @@ require.config({
 		geo: {
 			exports: 'geo_position_js'
 		},
+		firebase: {
+			exports: 'Firebase'
+		},
 		history: {
 			init: function () {
 				History.options.html4Mode = true;
@@ -39,6 +43,11 @@ require.config({
 	config: {
 		'lib/app': {
 			baseUrl: '../'
+		},
+		'lib/map': {
+			lat: 151.2151336669922,
+			lng: -33.85673152928874,
+			zoom: 10
 		}
 	},
 	deps: [
