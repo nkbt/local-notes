@@ -11,10 +11,8 @@ define('lib/navigation', ['module', 'dom', 'underscore', 'lib/app', 'app/firebas
 
 
 	function checkUser($element) {
-		auth(function(error, user) {
-			$element.find('[data-lib_navigation-guest]').toggle(!user);
-			$element.find('[data-lib_navigation-user]').toggle(!!user);
-			return user && user.displayName && $element.find('[data-lib_navigation-user-name]').html(user.displayName);
+		return auth(function(error, user) {
+			return handleUserMenu(user);
 		});
 	}
 	
@@ -39,9 +37,26 @@ define('lib/navigation', ['module', 'dom', 'underscore', 'lib/app', 'app/firebas
 		
 		return checkUser($element);
 	}
+	
+	
+	function handleUserMenu(user) {
+		app.$root.find('[data-lib_navigation-guest]').toggle(!user);
+		app.$root.find('[data-lib_navigation-user]').toggle(!!user);
+		return user && user.displayName && app.$root.find('[data-lib_navigation-user-name]').html(user.displayName);
+	}
+	function onLogin(event, user) {
+		return handleUserMenu(user);
+	}
+	function onLogout() {
+		console.log('onLogout', onLogout);
+		return handleUserMenu();
+	}
 
-	app.$root.on('lib/dispatcher:urlChanged', null, onUrlChanged);
-	app.$root.one('lib/layout:render:done', '.lib_navigation', init);
+	app.$root
+		.on('lib/dispatcher:urlChanged', onUrlChanged)
+		.on('app/controllers/login:success', onLogin)
+		.on('app/controllers/logout:success', onLogout)
+		.one('lib/layout:render:done', '.lib_navigation', init);
 
 
 	return {

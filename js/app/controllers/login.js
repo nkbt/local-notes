@@ -11,10 +11,9 @@ define(
 
 		var authObject = auth(function (error, user) {
 			if (error) {
-				app.$root.trigger('lib/messenger:show', [messenger.TYPE_ERROR, error.message]);
+				app.$root.trigger('app/controllers/login:fail', error);
 			} else if (user) {
-				app.$root.trigger('lib/messenger:show', [messenger.TYPE_MESSAGE, ["Logged in as '", user.displayName, "'"].join('')]);
-
+				app.$root.trigger('app/controllers/login:success', user);
 			}
 		});
 		console.log('authObject', authObject);
@@ -38,6 +37,15 @@ define(
 				actions[action] && actions[action].call();
 			}
 		});
+
+
+		app.$root
+			.on('app/controllers/login:fail', function (event, error) {
+				app.$root.trigger('lib/messenger:show', [messenger.TYPE_ERROR, error.message]);
+			})
+			.on('app/controllers/login:success', function (event, user) {
+				app.$root.trigger('lib/messenger:show', [messenger.TYPE_MESSAGE, ["Logged in as '", user.displayName, "'"].join('')]);
+			});
 
 
 		return actions;

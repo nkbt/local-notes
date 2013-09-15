@@ -41,7 +41,8 @@ define(
 			return markers.push(values, function (error) {
 				form.enable($form);
 				if (error) {
-					return $form.trigger('lib/messenger:show', [messenger.TYPE_ERROR, 'Cannot save.']);
+					var errorMessage = error.code === 'PERMISSION_DENIED' && 'Login, please' || error.message;
+					return $form.trigger('lib/messenger:show', [messenger.TYPE_ERROR, ['Cannot save. ', errorMessage].join('')]);
 				}
 				$form.trigger('app/map:markerReset');
 				return $form.trigger('lib/messenger:show', [messenger.TYPE_MESSAGE, 'Saved.']);
