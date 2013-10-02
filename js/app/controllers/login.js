@@ -5,7 +5,7 @@ define(
 	[
 		'lib/app',
 		'lib/messenger',
-		'app/firebase/markers/auth'
+		'app/firebase/auth'
 	],
 	function (app, messenger, auth) {
 
@@ -18,19 +18,23 @@ define(
 		});
 
 
-		function loginWith(provider) {
-			authObject.login(provider)
+		function loginWith(provider, options) {
+			authObject.login(provider, options)
 		}
 
 
 		var actions = {};
 
 		actions.twitter = function () {
-			return loginWith('twitter');
+			return loginWith('twitter', {
+				rememberMe: true
+			});
 		};
 
 		actions.facebook = function () {
-			return loginWith('facebook');
+			return loginWith('facebook', {
+				rememberMe: true
+			});
 		};
 
 		app.$root.on('lib/dispatcher:run', null, function (event, controller, action) {

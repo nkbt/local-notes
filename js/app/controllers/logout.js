@@ -5,7 +5,7 @@ define(
 	[
 		'lib/app',
 		'lib/messenger',
-		'app/firebase/markers/auth'
+		'app/firebase/auth'
 	],
 	function (app, messenger, auth) {
 
