@@ -77,7 +77,8 @@ require([
 	'lib/layout',
 	'lib/dispatcher',
 	'lib/sidebar',
-	'app/map'
+	'app/map',
+	'app/user'
 ], function ($, app) {
 	console.log('App loaded');
 

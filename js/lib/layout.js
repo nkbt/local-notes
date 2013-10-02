@@ -38,7 +38,7 @@ define('lib/layout', ['dom', 'underscore', 'lib/app'], function ($, _, app) {
 
 		$element.attr('data-lib_layout-rendered', null);
 		$element.find('.lib_layout[data-lib_layout-block="' + blockName + '"]').html($content);
-		_.defer(function() {
+		_.defer(function () {
 			$content.trigger('lib/layout:renderBlock:done', [blockName]);
 		});
 	}

@@ -26,15 +26,37 @@ define('lib/app', ['module', 'dom', 'underscore'], function (module, $, _) {
 	}
 
 
+	function viewTemplate(controller, action, name, callback) {
+		return text([config.views, '/', controller, '/', action, '/', name, '.html'].join(''), callback);
+	}
+
+
 	function view(controller, action, callback) {
 		return text([config.views, '/', controller, '/', action, '.html'].join(''), callback);
 	}
 
 
+	function fill($element, prefix, data) {
+		return _.each(data, function (value, key) {
+			return _.each($element.find(['[', prefix, '-', key, ']'].join('')), function (item) {
+				var $item = $(item),
+					target = $item.attr([prefix, '-', key].join(''));
+				if (target) {
+					$item.attr(target, value);
+				} else {
+					$item.html(value);
+				}
+				return $item;
+			});
+		});
+	}
+
 	return {
 		'$root': $element,
 		template: template,
-		view: view
+		viewTemplate: viewTemplate,
+		view: view,
+		fill: fill
 	};
 
 });

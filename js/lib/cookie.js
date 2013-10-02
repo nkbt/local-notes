@@ -1,17 +1,13 @@
 "use strict";
 
 define('lib/cookie', ['lib/app'], function (app) {
-	console.log('util/cookie loaded');
 
-	var cookieSet = function (name, value, days, domain, path) {
+	function cookieSet(name, value, days, domain, path) {
 
-		var cookieData = [
-			[name, value].join('=')
-		];
+		var cookieData = [[name, value].join('=')], date;
 
-		var expires = "";
 		if (days) {
-			var date = new Date();
+			date = new Date();
 			date.setTime(date.getTime() + (days * 86400000)); // 24 * 60 * 60 * 1000
 			cookieData.push(["expires", date.toGMTString()].join('='));
 		}
@@ -23,28 +19,31 @@ define('lib/cookie', ['lib/app'], function (app) {
 		}
 		cookieData.push(["path", path].join('='));
 		document.cookie = cookieData.join(';');
-	};
+	}
 
-	var cookieGet = function (name) {
+	function cookieGet(name) {
 
-		var nameEQ = name + "=";
-		var ca = document.cookie.split(';');
-		for (var i = 0; i < ca.length; i++) {
-			var c = ca[i];
-			while (c.charAt(0) == ' ') {
-				c = c.substring(1, c.length);
+		var nameMatch = name + "=",
+			cookies = document.cookie.split(';'),
+			cookie,
+			i;
+
+		for (i = 0; i < cookies.length; i = i + 1) {
+			cookie = cookies[i];
+			while (cookie.charAt(0) === ' ') {
+				cookie = cookie.substring(1, cookie.length);
 			}
-			if (c.indexOf(nameEQ) == 0) {
-				return c.substring(nameEQ.length, c.length);
+			if (cookie.indexOf(nameMatch) === 0) {
+				return cookie.substring(nameMatch.length, cookie.length);
 			}
 		}
 		return null;
-	};
+	}
 
-	var cookieDelete = function (name, domain, path) {
+	function cookieDelete(name, domain, path) {
 
 		cookieSet(name, "", -1, domain, path);
-	};
+	}
 
 	app.$root
 		.on('util/cookie:set', function (event, name, value, days, domain, path) {
@@ -61,5 +60,5 @@ define('lib/cookie', ['lib/app'], function (app) {
 		set: cookieSet,
 		get: cookieGet,
 		delete: cookieDelete
-	}
+	};
 });

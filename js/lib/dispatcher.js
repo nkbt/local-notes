@@ -3,7 +3,7 @@
 define(
 	'lib/dispatcher',
 	[
-		'module', 'dom', 'underscore', /*'history',*/ 'lib/app', 'lib/router',
+		'module', 'dom', 'underscore', 'lib/app', 'lib/router',
 		'lib/layout',
 		'lib/navigation'
 	],
@@ -17,29 +17,23 @@ define(
 	 */
 		function (module, $, _, app, router) {
 
+
 		var config = _.defaults(module.config(), {
 				basePath: 'app/controllers'
 			}),
-			routeCleaner = new RegExp(
-				[
-					["^", router.controllerName, "\/", router.actionName, "$"].join(''),
-					["\/", router.actionName, "$"].join(''),
-					["^", router.controllerName, "$"].join('')
-				].join('|')
-			);
+			currentHash = router.getRouteFromHash();
 
 
 		function run(route) {
-			var routeParts = route.split('/'),
-				controllerName = routeParts.shift(),
-				actionName = routeParts.shift(),
-				controllerModule = [config.basePath, controllerName].join('/');
+			var routeParsed = router.parse(route),
+				controllerModule = [config.basePath, routeParsed.controller].join('/');
 
 			require(
 				[controllerModule],
 				function controllerModuleLoaded() {
-					console.log('lib/dispatcher', 'trigger', 'lib/dispatcher:run', controllerName, actionName);
-					return app.$root.trigger('lib/dispatcher:run', [controllerName, actionName]);
+					console.log('lib/dispatcher', 'trigger', 'lib/dispatcher:run',
+						'[controller]', routeParsed.controller, '[action]', routeParsed.action, '[query]', routeParsed.query);
+					return app.$root.trigger('lib/dispatcher:run', [routeParsed.controller, routeParsed.action, routeParsed.query]);
 				},
 				function (error) {
 					console.warn('lib/dispatcher', controllerModule, error.message, error.stack.split('\n'));
@@ -50,25 +44,24 @@ define(
 
 		/**
 		 * @param {String} route
-		 * @param {String} title
 		 * @returns {*}
 		 */
-		function updateUrl(route, title) {
-			var path = ['/', route.replace(routeCleaner, '')].join('');
+		function updateUrl(route) {
+			var path = ['/', router.clean(route)].join('');
+			currentHash = path;
 			document.location.hash = ['!', path].join('');
-			console.log('lib/dispatcher', 'trigger', 'lib/dispatcher:urlChanged', path, title);
-			return app.$root.trigger('lib/dispatcher:urlChanged', [path, title]);
+			console.log('lib/dispatcher', 'trigger', 'lib/dispatcher:urlChanged', path);
+			return app.$root.trigger('lib/dispatcher:urlChanged', [path]);
 		}
 
 
 		/**
 		 * @param {String} route
-		 * @param {String} title
 		 * @returns {*}
 		 */
-		function dispatch(route, title) {
+		function dispatch(route) {
 			route = router.route(route);
-			updateUrl(route, title);
+			updateUrl(route);
 			return run(route);
 		}
 
@@ -90,29 +83,34 @@ define(
 		function onClick(event) {
 			event.preventDefault();
 			var $link = $(event.target).closest('.lib_dispatcher-link');
-			return dispatch($link.attr('href'), $link.data('lib_dispatcher-title') || $link.text());
+			return dispatch($link.attr('href'));
 		}
 
 		app.$root
 			.on('lib/dispatcher:dispatch', null, onDispatch)
 			.on('click', '.lib_dispatcher-link', onClick);
 
+
 		/**
 		 * Restoring current page
 		 */
 		function restoreState() {
-			var state = {
-				hash: document.location.hash.replace(/^\#\!/, ''),
-				title: ''
-			};
-			console.log('lib/dispatcher', 'restoreState', state, state.hash, state.title);
-			return dispatch(state.hash, state.title);
+			console.log('lib/dispatcher', 'restoreState', currentHash);
+			return dispatch(currentHash);
 		}
 
-		// $(restoreState); // Do not restore state
+
+		$(window).on('hashchange', function () {
+			var route = router.getRouteFromHash();
+			if (route !== currentHash) { // will happen only on browser's "back" or "forward"
+				currentHash = route;
+				dispatch(currentHash);
+			}
+		});
 
 		return {
-			dispatch: dispatch
+			dispatch: dispatch,
+			restoreState: restoreState
 		};
 
 	}
