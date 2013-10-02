@@ -13,6 +13,7 @@ require.config({
 		Firebase: '//cdn.firebase.com/v0/firebase',
 		FirebaseSimpleLogin: '//cdn.firebase.com/v0/firebase-simple-login'
 	},
+	waitSeconds: 0,
 	shim: {
 		async: {
 			exports: 'async'
