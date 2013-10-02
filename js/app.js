@@ -78,7 +78,8 @@ require([
 	'lib/dispatcher',
 	'lib/sidebar',
 	'app/map',
-	'app/user'
+	'app/user',
+	'app/sidebar/chat'
 ], function ($, app) {
 	console.log('App loaded');
 
